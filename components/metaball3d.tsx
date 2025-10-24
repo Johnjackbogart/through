@@ -1,14 +1,23 @@
-"use client"
+"use client";
 
-import * as THREE from "three"
-import { useRef, useMemo } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { MarchingCubes, MarchingCube, MeshTransmissionMaterial } from "@react-three/drei"
-import { Physics, RigidBody, BallCollider, CuboidCollider } from "@react-three/rapier"
+import * as THREE from "three";
+import { useRef, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  MarchingCubes,
+  MarchingCube,
+  MeshTransmissionMaterial,
+} from "@react-three/drei";
+import {
+  Physics,
+  RigidBody,
+  BallCollider,
+  CuboidCollider,
+} from "@react-three/rapier";
 
 // Custom shader material with intense refraction for liquid glass effect
 function LiquidGlassMaterial() {
-  const materialRef = useRef<any>()
+  const materialRef = useRef<any>();
 
   const shader = useMemo(
     () => ({
@@ -163,24 +172,38 @@ function LiquidGlassMaterial() {
       `,
     }),
     [],
-  )
+  );
 
   useFrame((state) => {
     if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime
+      materialRef.current.uniforms.time.value = state.clock.elapsedTime;
     }
-  })
+  });
 
-  return <shaderMaterial ref={materialRef} {...shader} transparent side={THREE.DoubleSide} />
+  return (
+    <shaderMaterial
+      ref={materialRef}
+      {...shader}
+      transparent
+      side={THREE.DoubleSide}
+    />
+  );
 }
 
-function MetaBall({ float = false, strength = 0.5, color, vec = new THREE.Vector3(), ...props }) {
-  const api = useRef<any>(null)
+function MetaBall({
+  float = false,
+  strength = 0.5,
+  color,
+  vec = new THREE.Vector3(),
+  ...props
+}) {
+  const api = useRef<any>(null);
 
   useFrame((state, delta) => {
     if (float && api.current) {
-      delta = Math.min(delta, 0.1)
-      const translation = api.current.translation()
+      delta = Math.min(delta, 0.1);
+      delta *= 0.05;
+      const translation = api.current.translation();
       if (translation) {
         api.current.applyImpulse(
           vec
@@ -188,73 +211,97 @@ function MetaBall({ float = false, strength = 0.5, color, vec = new THREE.Vector
             .normalize()
             .multiplyScalar(delta * -0.05),
           true,
-        )
+        );
       }
     }
-  })
+  });
 
   return (
-    <RigidBody ref={api} colliders={false} restitution={0.6} linearDamping={8} angularDamping={8} {...props}>
+    <RigidBody
+      ref={api}
+      colliders={false}
+      restitution={0.6}
+      linearDamping={8}
+      angularDamping={8}
+      {...props}
+    >
       <MarchingCube strength={strength} subtract={100} color={color} />
       <BallCollider args={[0.1]} type="dynamic" />
     </RigidBody>
-  )
+  );
 }
 
-function RandomMetaBall({ strength = 0.8, color, vec = new THREE.Vector3(), ...props }) {
-  const api = useRef<any>(null)
-  const timeRef = useRef(0)
-  const targetRef = useRef(new THREE.Vector3())
+function RandomMetaBall({
+  strength = 0.8,
+  color,
+  vec = new THREE.Vector3(),
+  ...props
+}) {
+  const api = useRef<any>(null);
+  const timeRef = useRef(0);
+  const targetRef = useRef(new THREE.Vector3());
 
   useFrame((state, delta) => {
     if (api.current) {
-      delta = Math.min(delta, 0.1)
-      timeRef.current += delta
+      delta = Math.min(delta, 0.01);
+      delta *= 0.05;
+      timeRef.current += delta;
 
       // Change direction every 2-4 seconds
       if (timeRef.current > 2 + Math.random() * 2) {
-        timeRef.current = 0
-        targetRef.current.set((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 0.5)
+        timeRef.current = 0;
+        targetRef.current.set(
+          (Math.random() - 0.5) * 2,
+          (Math.random() - 0.5) * 2,
+          (Math.random() - 0.5) * 0.5,
+        );
       }
 
-      const translation = api.current.translation()
+      const translation = api.current.translation();
       if (translation) {
         // Apply impulse towards random target
         const impulse = vec
           .copy(targetRef.current)
           .sub(translation)
           .normalize()
-          .multiplyScalar(delta * 0.15)
+          .multiplyScalar(delta * 0.15);
 
-        api.current.applyImpulse(impulse, true)
+        api.current.applyImpulse(impulse, true);
       }
     }
-  })
+  });
 
   return (
-    <RigidBody ref={api} colliders={false} restitution={0.8} linearDamping={4} angularDamping={4} {...props}>
+    <RigidBody
+      ref={api}
+      colliders={false}
+      restitution={0.8}
+      linearDamping={4}
+      angularDamping={4}
+      {...props}
+    >
       <MarchingCube strength={strength} subtract={10} color={color} />
-      <BallCollider args={[0.15]} type="dynamic" />
+      <BallCollider args={[0.15]} />
     </RigidBody>
-  )
+  );
 }
 
 function Pointer({ vec = new THREE.Vector3() }) {
-  const ref = useRef<any>(null)
+  const ref = useRef<any>(null);
 
   useFrame(({ pointer, viewport }) => {
     if (ref.current) {
-      const { width, height } = viewport.getCurrentViewport()
-      vec.set((pointer.x * width) / 2, (pointer.y * height) / 2, 0)
-      ref.current.setNextKinematicTranslation(vec)
+      const { width, height } = viewport.getCurrentViewport();
+      vec.set((pointer.x * width) / 2, (pointer.y * height) / 2, 0);
+      ref.current.setNextKinematicTranslation(vec);
     }
-  })
+  });
 
   return (
     <RigidBody type="kinematicPosition" colliders={false} ref={ref}>
-      <BallCollider args={[0.3]} type="dynamic" />
+      <BallCollider args={[0.3]} />
     </RigidBody>
-  )
+  );
 }
 
 export default function Metaball3D() {
@@ -262,13 +309,19 @@ export default function Metaball3D() {
     <Canvas
       dpr={[1, 1.5]}
       orthographic
-      camera={{ position: [0, 0, 5], zoom: 900 }}
+      camera={{ position: [0, 0, 5], zoom: 600, fov: 180 }}
       gl={{ alpha: true }}
       style={{ background: "transparent", width: "100%" }}
     >
       <ambientLight intensity={1} />
-      <Physics gravity={[0, -0.2, 0]}>
-        <MarchingCubes resolution={50} maxPolyCount={25000} enableUvs={false} enableColors>
+      <Physics gravity={[0, -0.005, 0]}>
+        <MarchingCubes
+          scale={0.5}
+          resolution={50}
+          maxPolyCount={25000}
+          enableUvs={false}
+          enableColors
+        >
           <LiquidGlassMaterial />
           {Array.from({ length: 10 }, (_, index) => (
             <MetaBall
@@ -276,17 +329,34 @@ export default function Metaball3D() {
               strength={0.9}
               key={"metaball-" + index}
               color="#ffffff"
-              position={[Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25, 0]}
+              position={[
+                Math.random() * 0.5 - 0.25,
+                Math.random() * 0.5 - 0.25,
+                0,
+              ]}
             />
           ))}
           <RandomMetaBall strength={1.2} color="#ffffff" position={[1, 1, 0]} />
-          <RandomMetaBall strength={1.0} color="#ffffff" position={[-1, -1, 0]} />
-          <RandomMetaBall strength={1.1} color="#ffffff" position={[0, 1.5, 0]} />
+          <RandomMetaBall
+            strength={1.0}
+            color="#ffffff"
+            position={[-1, -1, 0]}
+          />
+          <RandomMetaBall
+            strength={1.1}
+            color="#ffffff"
+            position={[0, 1.5, 0]}
+          />
           <Pointer />
         </MarchingCubes>
-        
 
-        <MarchingCubes resolution={50} maxPolyCount={25000} enableUvs={false} enableColors>
+        <MarchingCubes
+          scale={0.5}
+          resolution={50}
+          maxPolyCount={25000}
+          enableUvs={false}
+          enableColors
+        >
           <MeshTransmissionMaterial
             transmission={1}
             thickness={0.8}
@@ -307,27 +377,47 @@ export default function Metaball3D() {
               strength={7.0}
               key={"transmission-metaball-" + index}
               color="#ffffff"
-              position={[Math.random() * 1.5 - 0.75, Math.random() * 1.5 - 0.75, Math.random() * 0.5 - 0.25]}
+              position={[
+                Math.random() * 1.5 - 0.75,
+                Math.random() * 1.5 - 0.75,
+                Math.random() * 0.5 - 0.25,
+              ]}
             />
           ))}
-          <RandomMetaBall strength={0.9} color="#ffffff" position={[-1.5, 0.5, 0.2]} />
-          <RandomMetaBall strength={0.8} color="#ffffff" position={[1.2, -0.8, -0.1]} />
+          <RandomMetaBall
+            strength={0.9}
+            color="#ffffff"
+            position={[-1.5, 0.5, 0.2]}
+          />
+          <RandomMetaBall
+            strength={0.8}
+            color="#ffffff"
+            position={[1.2, -0.8, -0.1]}
+          />
         </MarchingCubes>
 
         <Walls />
       </Physics>
     </Canvas>
-  )
+  );
 }
 
 function Walls() {
   return (
     <>
       <CuboidCollider position={[0, -25.5, 0]} args={[8, 1, 10]} />
-      <CuboidCollider rotation={[0, 0, -Math.PI / 0.06]} position={[-50, 0, 0]} args={[1, 8, 10]} />
-      <CuboidCollider rotation={[0, 0, Math.PI / 0.06]} position={[50, 0, 0]} args={[1, 8, 10]} />
+      <CuboidCollider
+        rotation={[0, 0, -Math.PI / 0.06]}
+        position={[-50, 0, 0]}
+        args={[1, 8, 10]}
+      />
+      <CuboidCollider
+        rotation={[0, 0, Math.PI / 0.06]}
+        position={[50, 0, 0]}
+        args={[1, 8, 10]}
+      />
       <CuboidCollider position={[0, 0, -21.5]} args={[8, 8, 1]} />
       <CuboidCollider position={[0, 0, 21.5]} args={[8, 8, 1]} />
     </>
-  )
+  );
 }
