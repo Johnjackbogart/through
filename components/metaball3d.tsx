@@ -202,14 +202,14 @@ function MetaBall({
   useFrame((state, delta) => {
     if (float && api.current) {
       delta = Math.min(delta, 0.1);
-      delta *= 0.05;
+      delta *= 0.005;
       const translation = api.current.translation();
       if (translation) {
         api.current.applyImpulse(
           vec
             .copy(translation)
             .normalize()
-            .multiplyScalar(delta * -0.05),
+            .multiplyScalar(delta * -0.005),
           true,
         );
       }
@@ -220,13 +220,13 @@ function MetaBall({
     <RigidBody
       ref={api}
       colliders={false}
-      restitution={0.6}
+      restitution={0.01}
       linearDamping={8}
       angularDamping={8}
       {...props}
     >
       <MarchingCube strength={strength} subtract={100} color={color} />
-      <BallCollider args={[0.1]} type="dynamic" />
+      <BallCollider args={[0.01]} />
     </RigidBody>
   );
 }
@@ -244,7 +244,7 @@ function RandomMetaBall({
   useFrame((state, delta) => {
     if (api.current) {
       delta = Math.min(delta, 0.01);
-      delta *= 0.05;
+      delta *= 0.005;
       timeRef.current += delta;
 
       // Change direction every 2-4 seconds
@@ -264,7 +264,7 @@ function RandomMetaBall({
           .copy(targetRef.current)
           .sub(translation)
           .normalize()
-          .multiplyScalar(delta * 0.15);
+          .multiplyScalar(delta * 0.015);
 
         api.current.applyImpulse(impulse, true);
       }
@@ -275,31 +275,39 @@ function RandomMetaBall({
     <RigidBody
       ref={api}
       colliders={false}
-      restitution={0.8}
+      restitution={0.1}
       linearDamping={4}
       angularDamping={4}
       {...props}
     >
-      <MarchingCube strength={strength} subtract={10} color={color} />
-      <BallCollider args={[0.15]} />
+      <MarchingCube strength={strength} subtract={100} color={color} />
+      <BallCollider args={[0.015]} />
     </RigidBody>
   );
 }
 
 function Pointer({ vec = new THREE.Vector3() }) {
   const ref = useRef<any>(null);
+  const smooth = useRef(new THREE.Vector3());
 
   useFrame(({ pointer, viewport }) => {
     if (ref.current) {
       const { width, height } = viewport.getCurrentViewport();
       vec.set((pointer.x * width) / 2, (pointer.y * height) / 2, 0);
-      ref.current.setNextKinematicTranslation(vec);
+      // Smooth pointer movement to reduce collision impulse
+      smooth.current.lerp(vec, 0.2);
+      ref.current.setNextKinematicTranslation(smooth.current);
     }
   });
 
   return (
-    <RigidBody type="kinematicPosition" colliders={false} ref={ref}>
-      <BallCollider args={[0.3]} />
+    <RigidBody
+      type="kinematicPosition"
+      colliders={false}
+      ref={ref}
+      restitution={0.1}
+    >
+      <BallCollider args={[0.2]} restitution={0.1} />
     </RigidBody>
   );
 }
@@ -311,10 +319,10 @@ export default function Metaball3D() {
       orthographic
       camera={{ position: [0, 0, 5], zoom: 600, fov: 180 }}
       gl={{ alpha: true }}
-      style={{ background: "transparent", width: "100%" }}
+      style={{ background: "transparent", width: "100%", height: "100%" }}
     >
       <ambientLight intensity={1} />
-      <Physics gravity={[0, -0.005, 0]}>
+      <Physics gravity={[0, -0.0005, 0]}>
         <MarchingCubes
           scale={0.5}
           resolution={50}
@@ -326,7 +334,7 @@ export default function Metaball3D() {
           {Array.from({ length: 10 }, (_, index) => (
             <MetaBall
               float
-              strength={0.9}
+              strength={1}
               key={"metaball-" + index}
               color="#ffffff"
               position={[
@@ -351,7 +359,7 @@ export default function Metaball3D() {
         </MarchingCubes>
 
         <MarchingCubes
-          scale={0.5}
+          scale={0.75}
           resolution={50}
           maxPolyCount={25000}
           enableUvs={false}
@@ -374,7 +382,7 @@ export default function Metaball3D() {
           {Array.from({ length: 6 }, (_, index) => (
             <MetaBall
               float
-              strength={7.0}
+              strength={1.0}
               key={"transmission-metaball-" + index}
               color="#ffffff"
               position={[
@@ -403,21 +411,15 @@ export default function Metaball3D() {
 }
 
 function Walls() {
+  // Walls sized to roughly match MarchingCubes scale={3}
+  // Half-extent ~1.5 with a small margin
   return (
     <>
-      <CuboidCollider position={[0, -25.5, 0]} args={[8, 1, 10]} />
-      <CuboidCollider
-        rotation={[0, 0, -Math.PI / 0.06]}
-        position={[-50, 0, 0]}
-        args={[1, 8, 10]}
-      />
-      <CuboidCollider
-        rotation={[0, 0, Math.PI / 0.06]}
-        position={[50, 0, 0]}
-        args={[1, 8, 10]}
-      />
-      <CuboidCollider position={[0, 0, -21.5]} args={[8, 8, 1]} />
-      <CuboidCollider position={[0, 0, 21.5]} args={[8, 8, 1]} />
+      <CuboidCollider position={[0, -1.6, 0]} args={[2, 0.1, 2]} />
+      <CuboidCollider position={[-1.6, 0, 0]} args={[0.1, 2, 2]} />
+      <CuboidCollider position={[1.6, 0, 0]} args={[0.1, 2, 2]} />
+      <CuboidCollider position={[0, 0, -1.6]} args={[2, 2, 0.1]} />
+      <CuboidCollider position={[0, 0, 1.6]} args={[2, 2, 0.1]} />
     </>
   );
 }
