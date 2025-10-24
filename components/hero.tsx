@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Metaball3D from "./metaball3d";
 import { MeshGradient } from "@paper-design/shaders-react";
 
@@ -86,14 +86,6 @@ export function Hero() {
             >
               Start Your Project
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-border text-foreground hover:bg-muted group bg-transparent"
-            >
-              <Play className="mr-2 h-4 w-4" />
-              Watch Demo
             </Button>
           </div>
         </div>

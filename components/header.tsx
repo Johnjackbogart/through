@@ -15,7 +15,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-sm" />
             <span className="font-semibold text-lg text-foreground">
-              Through.tech
+              Through
             </span>
           </div>
 

@@ -202,6 +202,7 @@ function MetaBall({
   useFrame((state, delta) => {
     if (float && api.current) {
       delta = Math.min(delta, 0.1);
+      delta *= 0.05;
       const translation = api.current.translation();
       if (translation) {
         api.current.applyImpulse(
@@ -242,7 +243,8 @@ function RandomMetaBall({
 
   useFrame((state, delta) => {
     if (api.current) {
-      delta = Math.min(delta, 0.1);
+      delta = Math.min(delta, 0.01);
+      delta *= 0.05;
       timeRef.current += delta;
 
       // Change direction every 2-4 seconds
@@ -279,7 +281,7 @@ function RandomMetaBall({
       {...props}
     >
       <MarchingCube strength={strength} subtract={10} color={color} />
-      <BallCollider args={[0.15]} type="dynamic" />
+      <BallCollider args={[0.15]} />
     </RigidBody>
   );
 }
@@ -297,7 +299,7 @@ function Pointer({ vec = new THREE.Vector3() }) {
 
   return (
     <RigidBody type="kinematicPosition" colliders={false} ref={ref}>
-      <BallCollider args={[0.3]} type="dynamic" />
+      <BallCollider args={[0.3]} />
     </RigidBody>
   );
 }
@@ -307,13 +309,14 @@ export default function Metaball3D() {
     <Canvas
       dpr={[1, 1.5]}
       orthographic
-      camera={{ position: [0, 0, 5], zoom: 800 }}
+      camera={{ position: [0, 0, 5], zoom: 600, fov: 180 }}
       gl={{ alpha: true }}
       style={{ background: "transparent", width: "100%" }}
     >
       <ambientLight intensity={1} />
-      <Physics gravity={[0, -0.0002, 0]}>
+      <Physics gravity={[0, -0.005, 0]}>
         <MarchingCubes
+          scale={0.5}
           resolution={50}
           maxPolyCount={25000}
           enableUvs={false}
@@ -348,6 +351,7 @@ export default function Metaball3D() {
         </MarchingCubes>
 
         <MarchingCubes
+          scale={0.5}
           resolution={50}
           maxPolyCount={25000}
           enableUvs={false}
