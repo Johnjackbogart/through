@@ -1,7 +1,17 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Metaball3D from "./metaball3d";
 import { MeshGradient } from "@paper-design/shaders-react";
+
+// Lazy load the heavy 3D component to improve initial page load
+const Metaball3D = dynamic(() => import("./metaball3d"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-transparent" aria-label="Loading 3D visualization" />
+  ),
+});
 
 export function Hero() {
   return (
@@ -45,20 +55,22 @@ export function Hero() {
         </defs>
       </svg>
 
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 pointer-events-none">
         <MeshGradient
           colors={["#252525", "#ada67c", "#e1e0d6", "#252525", "#ada67c"]}
           speed={0.25}
+          maxPixelCount={2_000_000}
           className="w-full h-full"
         />
         <MeshGradient
           colors={["#252525", "#e1e0d6", "#ada67c", "#252525"]}
           speed={0.125}
+          maxPixelCount={2_000_000}
           className="absolute inset-0 w-full h-full opacity-60"
         />
       </div>
 
-      <div className="fixed inset-0 z-10">
+      <div className="fixed inset-0 z-10 pointer-events-none">
         <Metaball3D />
       </div>
 
