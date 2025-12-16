@@ -36,6 +36,7 @@ interface FieldMarchingCubeProps {
   strength: number;
   subtract: number;
   color: string;
+  dynamicStrength?: () => number;
 }
 
 function WebGLContextLossHandler({ onLost }: { onLost: () => void }) {
@@ -63,6 +64,7 @@ function FieldMarchingCube({
   strength,
   subtract,
   color,
+  dynamicStrength,
 }: FieldMarchingCubeProps) {
   const cubeRef = useRef<THREE.Group>(null);
   const vec = useMemo(() => new THREE.Vector3(), []);
@@ -76,11 +78,14 @@ function FieldMarchingCube({
     const normalize = (value: number) =>
       THREE.MathUtils.clamp(0.5 + (value / bounds) * 0.5, 0, 1);
 
+    const strengthScale = dynamicStrength?.() ?? 1;
+    if (strengthScale <= 0) return;
+
     marchingRef.current.addBall(
       normalize(vec.x),
       normalize(vec.y),
       normalize(vec.z),
-      strength,
+      strength * strengthScale,
       subtract,
       ballColor,
     );
@@ -385,6 +390,132 @@ function RandomMetaBall({
   );
 }
 
+function PoppingMetaBall({
+  strength = 1.2,
+  color,
+  marchingRef,
+  bounds,
+  vec = new THREE.Vector3(),
+  ...props
+}: MarchingBallProps) {
+  const api = useRef<RapierRigidBody>(null);
+  const fadeRef = useRef(0);
+  const phaseRef = useRef<"hidden" | "fadingIn" | "visible" | "fadingOut">("hidden");
+  const timerRef = useRef(0);
+  const hiddenDurationRef = useRef(THREE.MathUtils.randFloat(1.5, 3.5));
+  const visibleDurationRef = useRef(THREE.MathUtils.randFloat(1.25, 2.5));
+  const vertexIndexRef = useRef(0);
+
+  const nextTriangularPosition = useCallback((): [number, number, number] => {
+    const radius = bounds * 0.35;
+    const angle = (vertexIndexRef.current / 3) * Math.PI * 2;
+    vertexIndexRef.current = (vertexIndexRef.current + 1) % 3;
+
+    const jitter = radius * 0.15;
+    const x = Math.cos(angle) * radius + (Math.random() - 0.5) * jitter;
+    const y = Math.sin(angle) * radius + (Math.random() - 0.5) * jitter;
+    const z = (Math.random() - 0.5) * bounds * 0.15;
+
+    return [x, y, z];
+  }, [bounds]);
+
+  const resetPhaseTimer = useCallback((durationRef: { current: number }, min: number, max: number) => {
+    durationRef.current = THREE.MathUtils.randFloat(min, max);
+    timerRef.current = 0;
+  }, []);
+
+  const warpToRandomPosition = useCallback(() => {
+    const [x, y, z] = nextTriangularPosition();
+    if (api.current) {
+      api.current.setTranslation({ x, y, z }, true);
+      api.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    }
+  }, [nextTriangularPosition]);
+
+  useEffect(() => {
+    warpToRandomPosition();
+  }, [warpToRandomPosition]);
+
+  useFrame((_, delta) => {
+    const dt = Math.min(delta, 0.05);
+    timerRef.current += dt;
+
+    switch (phaseRef.current) {
+      case "hidden": {
+        fadeRef.current = 0;
+        if (timerRef.current >= hiddenDurationRef.current) {
+          phaseRef.current = "fadingIn";
+          timerRef.current = 0;
+          warpToRandomPosition();
+        }
+        break;
+      }
+      case "fadingIn": {
+        const fadeDuration = 0.75;
+        fadeRef.current = THREE.MathUtils.clamp(timerRef.current / fadeDuration, 0, 1);
+        if (timerRef.current >= fadeDuration) {
+          phaseRef.current = "visible";
+          resetPhaseTimer(visibleDurationRef, 1.25, 2.75);
+        }
+        break;
+      }
+      case "visible": {
+        fadeRef.current = 1;
+        if (timerRef.current >= visibleDurationRef.current) {
+          phaseRef.current = "fadingOut";
+          timerRef.current = 0;
+        }
+        break;
+      }
+      case "fadingOut": {
+        const fadeDuration = 0.85;
+        fadeRef.current = 1 - THREE.MathUtils.clamp(timerRef.current / fadeDuration, 0, 1);
+        if (timerRef.current >= fadeDuration) {
+          phaseRef.current = "hidden";
+          resetPhaseTimer(hiddenDurationRef, 1.5, 3.5);
+        }
+        break;
+      }
+    }
+
+    if (api.current && fadeRef.current > 0 && phaseRef.current !== "hidden") {
+      const translation = api.current.translation();
+      if (translation) {
+        api.current.applyImpulse(
+          vec
+            .copy(translation)
+            .normalize()
+            .multiplyScalar(dt * -0.01 * fadeRef.current),
+          true,
+        );
+      }
+    }
+  });
+
+  const dynamicStrength = useCallback(() => fadeRef.current, []);
+
+  return (
+    <RigidBody
+      ref={api}
+      colliders={false}
+      restitution={0.05}
+      linearDamping={4}
+      angularDamping={4}
+      {...props}
+    >
+      <FieldMarchingCube
+        marchingRef={marchingRef}
+        bounds={bounds}
+        strength={strength}
+        subtract={90}
+        color={color}
+        dynamicStrength={dynamicStrength}
+      />
+      <BallCollider args={[0.02]} />
+    </RigidBody>
+  );
+}
+
 interface PointerProps {
   vec?: THREE.Vector3;
 }
@@ -489,6 +620,12 @@ export default function Metaball3D() {
             bounds={INNER_FIELD_BOUNDS}
             position={[0, 1.5, 0]}
           />
+          <PoppingMetaBall
+            strength={1.35}
+            color="#ffffff"
+            marchingRef={innerMarchingRef}
+            bounds={INNER_FIELD_BOUNDS}
+          />
           <Pointer />
         </MarchingCubes>
 
@@ -546,6 +683,12 @@ export default function Metaball3D() {
             marchingRef={outerMarchingRef}
             bounds={OUTER_FIELD_BOUNDS}
             position={[1.2, -0.8, -0.1]}
+          />
+          <PoppingMetaBall
+            strength={1}
+            color="#ffffff"
+            marchingRef={outerMarchingRef}
+            bounds={OUTER_FIELD_BOUNDS}
           />
         </MarchingCubes>
 
