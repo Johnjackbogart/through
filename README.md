@@ -1,19 +1,18 @@
-# Landing page design
+## Local development with Bun
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+1. Run `bun install` to populate dependencies and create `bun.lockb`.
+2. Use `bun run dev` for a Hot Module Reload dev server.
+3. Run `bun run build` before deploying to make sure the production build compiles.
+4. Use `bun run lint` to validate the repository with ESLint.
+5. Start a production server locally with `bun run start` if needed.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/johnjackbogarts-projects/v0-landing-page-design)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/pzmVZr5Gwgh)
-
-## Overview
-
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+# Began building this in v0
 
 ## Deployment
 
 Your project is live at:
 
+**[https://though.tech](https://through.tech)**
 **[https://vercel.com/johnjackbogarts-projects/v0-landing-page-design](https://vercel.com/johnjackbogarts-projects/v0-landing-page-design)**
 
 ## Build your app

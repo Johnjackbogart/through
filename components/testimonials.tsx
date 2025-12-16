@@ -33,7 +33,7 @@ export function Testimonials() {
             Client Success Stories
           </h2>
           <p className="text-lg text-white/50 text-pretty leading-relaxed">
-            Don't just take our word for it. Here's what our clients have to say about working with us.
+            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about working with us.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export function Testimonials() {
                   <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                 ))}
               </div>
-              <p className="text-card-foreground mb-6 leading-relaxed">"{testimonial.content}"</p>
+              <p className="text-card-foreground mb-6 leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
               <div>
                 <p className="font-semibold text-card-foreground">{testimonial.name}</p>
                 <p className="text-sm text-muted-foreground">{testimonial.role}</p>
