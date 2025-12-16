@@ -5,8 +5,11 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "dev:ts": "concurrently -k -n next,tsc \"bun run dev\" \"bun run ts:watch\"",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "ts": "tsc --noEmit",
+    "ts:watch": "tsc --watch --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -75,6 +78,7 @@
     "@types/node": "^22.18.12",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",
