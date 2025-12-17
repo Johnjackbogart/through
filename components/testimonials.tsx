@@ -32,17 +32,17 @@ export function Testimonials() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white/75 mb-4 text-balance">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 text-balance">
             Client Success Stories
           </h2>
-          <p className="text-lg text-white/50 text-pretty leading-relaxed">
+          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
             Don&apos;t just take our word for it. Here&apos;s what our clients have to say about working with us.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="p-6 bg-card/25 backdrop-blur-md border-2 border-[#252525]/50">
+            <Card key={index} className="p-6 bg-card/60 backdrop-blur-md border-2 border-border/60">
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-primary text-primary" />

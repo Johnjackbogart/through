@@ -12,12 +12,12 @@ export function Contact() {
       className="scroll-mt-24 py-20 lg:py-32 relative z-20 bg-muted/20"
     >
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="max-w-4xl mx-auto bg-muted/20 backdrop-blur-md rounded-2xl p-8 sm:p-10 lg:p-12 border-2 border-[#ada67c]/50">
+        <div className="max-w-4xl mx-auto bg-card/60 backdrop-blur-md rounded-2xl p-8 sm:p-10 lg:p-12 border-2 border-primary/40">
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold mb-3 text-balance">
               Contact us
             </h2>
-            <p className="text-secondary-foreground/80 mb-8 text-pretty leading-relaxed">
+            <p className="text-muted-foreground mb-8 text-pretty leading-relaxed">
               Tell us what you’re building and we’ll follow up within 1–2 business
               days.
             </p>
@@ -32,9 +32,7 @@ export function Contact() {
           >
             <div className="grid sm:grid-cols-2 gap-4">
               <label className="grid gap-2">
-                <span className="text-sm text-secondary-foreground/80">
-                  Name
-                </span>
+                <span className="text-sm text-muted-foreground">Name</span>
                 <input
                   required
                   name="name"
@@ -44,9 +42,7 @@ export function Contact() {
                 />
               </label>
               <label className="grid gap-2">
-                <span className="text-sm text-secondary-foreground/80">
-                  Email
-                </span>
+                <span className="text-sm text-muted-foreground">Email</span>
                 <input
                   required
                   type="email"
@@ -59,7 +55,7 @@ export function Contact() {
             </div>
 
             <label className="grid gap-2">
-              <span className="text-sm text-secondary-foreground/80">
+              <span className="text-sm text-muted-foreground">
                 What can we help with?
               </span>
               <textarea
@@ -80,13 +76,13 @@ export function Contact() {
                 Send message
               </Button>
               {submitted ? (
-                <p className="text-sm text-secondary-foreground/80">
+                <p className="text-sm text-muted-foreground">
                   Thanks — we’ll be in touch shortly.
                 </p>
               ) : (
-                <p className="text-sm text-secondary-foreground/60">
+                <p className="text-sm text-muted-foreground">
                   Or email{" "}
-                  <a className="underline hover:text-secondary-foreground" href="mailto:hello@through.tech">
+                  <a className="underline hover:text-foreground" href="mailto:hello@through.tech">
                     hello@through.tech
                   </a>
                 </p>
@@ -98,4 +94,3 @@ export function Contact() {
     </section>
   );
 }
-

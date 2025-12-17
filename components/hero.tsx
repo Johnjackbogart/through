@@ -89,7 +89,7 @@ export function Hero() {
             The Way is Through
           </h1>
 
-          <p className="text-5xl md:text-xl text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
             We're a multidisciplinary team of consultants dedicated to
             exceptional client service across IT/Security, Software, and
             Marketing

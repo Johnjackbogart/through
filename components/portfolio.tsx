@@ -36,8 +36,10 @@ export function Portfolio() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white/75 mb-4 text-balance">Featured Work</h2>
-          <p className="text-lg text-white/50 text-pretty leading-relaxed">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 text-balance">
+            Featured Work
+          </h2>
+          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
             Explore our portfolio of successful projects that showcase our commitment to excellence and innovation.
           </p>
         </div>
@@ -51,7 +53,7 @@ export function Portfolio() {
               rel={project.url ? "noreferrer" : undefined}
               className="group block"
             >
-              <Card className="overflow-hidden border-2 border-[#252525]/50 hover:shadow-xl transition-all cursor-pointer bg-card/25 backdrop-blur-md">
+              <Card className="overflow-hidden border-2 border-border/60 hover:shadow-xl transition-all cursor-pointer bg-card/60 backdrop-blur-md">
                 <div className="relative overflow-hidden aspect-[3/2]">
                   <Image
                     src={project.image || "/placeholder.svg"}
@@ -63,13 +65,13 @@ export function Portfolio() {
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   {project.url ? (
                     <div className="absolute bottom-4 right-4 w-10 h-10 bg-primary rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowUpRight className="w-5 h-5 text-primary-primary" />
+                      <ArrowUpRight className="w-5 h-5 text-primary-foreground" />
                     </div>
                   ) : null}
                 </div>
-                <div className="p-6 bg-card/25 backdrop-blur-md">
+                <div className="p-6 bg-card/60 backdrop-blur-md">
                   <p className="text-sm text-muted-foreground font-medium mb-2">{project.category}</p>
-                  <h3 className="text-xl font-semibold text-card-primary">{project.title}</h3>
+                  <h3 className="text-xl font-semibold text-card-foreground">{project.title}</h3>
                 </div>
               </Card>
             </a>

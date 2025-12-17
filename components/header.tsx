@@ -11,7 +11,7 @@ export function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-sm">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link
@@ -29,25 +29,25 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <a
               href="#services"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
             >
               Services
             </a>
             <a
               href="#portfolio"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
             >
               Portfolio
             </a>
             <a
               href="#success-stories"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
             >
               About
             </a>
             <a
               href="#contact"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
             >
               Contact
             </a>
@@ -78,28 +78,28 @@ export function Header() {
               <a
                 href="#services"
                 onClick={closeMenu}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
               >
                 Services
               </a>
               <a
                 href="#portfolio"
                 onClick={closeMenu}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
               >
                 Portfolio
               </a>
               <a
                 href="#success-stories"
                 onClick={closeMenu}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
               >
                 About
               </a>
               <a
                 href="#contact"
                 onClick={closeMenu}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
               >
                 Contact
               </a>
