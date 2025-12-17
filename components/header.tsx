@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, X } from "lucide-react";
@@ -7,17 +8,23 @@ import { useState } from "react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-2"
+            aria-label="Go to home page"
+            onClick={closeMenu}
+          >
             <div className="w-8 h-8 bg-primary rounded-sm" />
             <span className="font-semibold text-lg text-foreground">
               Through
             </span>
-          </div>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             <a
@@ -33,7 +40,7 @@ export function Header() {
               Portfolio
             </a>
             <a
-              href="#about"
+              href="#success-stories"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               About
@@ -48,8 +55,11 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Get Started
+            <Button
+              asChild
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <a href="#contact">Get Started</a>
             </Button>
           </div>
 
@@ -67,36 +77,40 @@ export function Header() {
             <nav className="flex flex-col gap-4">
               <a
                 href="#services"
+                onClick={closeMenu}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Services
               </a>
               <a
                 href="#portfolio"
+                onClick={closeMenu}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Portfolio
               </a>
               <a
-                href="#about"
+                href="#success-stories"
+                onClick={closeMenu}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 About
               </a>
               <a
                 href="#contact"
+                onClick={closeMenu}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Contact
               </a>
-              <div className="flex items-center gap-2">
-                <ThemeToggle />
-                <span className="text-sm text-muted-foreground">
-                  Toggle theme
-                </span>
-              </div>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full">
-                Get Started
+              <ThemeToggle showLabel onAfterToggle={closeMenu} />
+              <Button
+                asChild
+                className="bg-primary text-primary-foreground hover:bg-primary/90 w-full"
+              >
+                <a href="#contact" onClick={closeMenu}>
+                  Get Started
+                </a>
               </Button>
             </nav>
           </div>

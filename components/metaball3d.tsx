@@ -70,6 +70,8 @@ function FieldMarchingCube({
   const vec = useMemo(() => new THREE.Vector3(), []);
   const ballColor = useMemo(() => new THREE.Color(color), [color]);
 
+  // Run before drei's MarchingCubes update/reset (which uses priority -1),
+  // otherwise the first frame renders empty and can "flash" on mount.
   useFrame(() => {
     if (!marchingRef.current || !cubeRef.current) return;
     cubeRef.current.getWorldPosition(vec);
@@ -89,7 +91,7 @@ function FieldMarchingCube({
       subtract,
       ballColor,
     );
-  });
+  }, -1.5);
 
   return <group ref={cubeRef} />;
 }
@@ -548,7 +550,8 @@ function Pointer({ vec = new THREE.Vector3() }: PointerProps) {
 
 export default function Metaball3D() {
   const [canvasKey, setCanvasKey] = useState(0);
-  const [eventSource, setEventSource] = useState<HTMLElement | undefined>(undefined);
+  const [isVisible, setIsVisible] = useState(false);
+  const [eventSource] = useState<HTMLElement>(() => document.body);
   const innerMarchingRef = useRef<MarchingCubesType | null>(null);
   const outerMarchingRef = useRef<MarchingCubesType | null>(null);
 
@@ -557,8 +560,30 @@ export default function Metaball3D() {
   }, []);
 
   useEffect(() => {
-    setEventSource(document.body);
-  }, []);
+    setIsVisible(false);
+    const id = requestAnimationFrame(() => setIsVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, [canvasKey]);
+
+  const innerInitialPositions = useMemo(
+    () =>
+      Array.from({ length: 10 }, () => [
+        Math.random() * 0.5 - 0.25,
+        Math.random() * 0.5 - 0.25,
+        0,
+      ]) as [number, number, number][],
+    [],
+  );
+
+  const outerInitialPositions = useMemo(
+    () =>
+      Array.from({ length: 6 }, () => [
+        Math.random() * 1.5 - 0.75,
+        Math.random() * 1.5 - 0.75,
+        Math.random() * 0.5 - 0.25,
+      ]) as [number, number, number][],
+    [],
+  );
 
   return (
     <Canvas
@@ -568,11 +593,18 @@ export default function Metaball3D() {
       camera={{ position: [0, 0, 5], zoom: 600, fov: 180 }}
       gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
       eventSource={eventSource}
-      style={{ background: "transparent", width: "100%", height: "100%" }}
+      style={{
+        background: "transparent",
+        width: "100%",
+        height: "100%",
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 200ms ease",
+        willChange: "opacity",
+      }}
     >
       <WebGLContextLossHandler onLost={handleContextLost} />
       <ambientLight intensity={1} />
-      <Physics gravity={[0, -0.0005, 0]}>
+      <Physics gravity={[0, -0.0005, 0]} updatePriority={-2}>
         <MarchingCubes
           ref={innerMarchingRef}
           scale={0.8}
@@ -582,8 +614,7 @@ export default function Metaball3D() {
           enableColors
         >
           <LiquidGlassMaterial />
-          {/* eslint-disable react-hooks/purity -- Random positions are intentional for initial physics state */}
-          {Array.from({ length: 10 }, (_, index) => (
+          {innerInitialPositions.map((position, index) => (
             <MetaBall
               float
               strength={1}
@@ -591,14 +622,9 @@ export default function Metaball3D() {
               color="#ffffff"
               marchingRef={innerMarchingRef}
               bounds={INNER_FIELD_BOUNDS}
-              position={[
-                Math.random() * 0.5 - 0.25,
-                Math.random() * 0.5 - 0.25,
-                0,
-              ]}
+              position={position}
             />
           ))}
-          {/* eslint-enable react-hooks/purity */}
           <RandomMetaBall
             strength={1.2}
             color="#ffffff"
@@ -653,8 +679,7 @@ export default function Metaball3D() {
             transparent
             opacity={0.6}
           />
-          {/* eslint-disable react-hooks/purity -- Random positions are intentional for initial physics state */}
-          {Array.from({ length: 6 }, (_, index) => (
+          {outerInitialPositions.map((position, index) => (
             <MetaBall
               float
               strength={1.0}
@@ -662,14 +687,9 @@ export default function Metaball3D() {
               color="#ffffff"
               marchingRef={outerMarchingRef}
               bounds={OUTER_FIELD_BOUNDS}
-              position={[
-                Math.random() * 1.5 - 0.75,
-                Math.random() * 1.5 - 0.75,
-                Math.random() * 0.5 - 0.25,
-              ]}
+              position={position}
             />
           ))}
-          {/* eslint-enable react-hooks/purity */}
           <RandomMetaBall
             strength={0.9}
             color="#ffffff"

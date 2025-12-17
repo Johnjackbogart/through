@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { MeshGradient } from "@paper-design/shaders-react";
+import { MeshGradient } from "@/components/mesh-gradient";
 
 // Lazy load the heavy 3D component to improve initial page load
 const Metaball3D = dynamic(() => import("./metaball3d"), {
@@ -97,11 +97,14 @@ export function Hero() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto">
             <Button
+              asChild
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 group"
             >
-              Start Your Project
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <a href="#contact">
+                Start Your Project
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
           </div>
         </div>

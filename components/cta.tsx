@@ -12,16 +12,23 @@ export function CTA() {
             your digital presence.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 group">
-              Schedule a Consultation
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <Button
+              asChild
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 group"
+            >
+              <a href="#contact">
+                Schedule a Consultation
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
             <Button
+              asChild
               size="lg"
               variant="outline"
               className="border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/10 bg-transparent"
             >
-              View Our Process
+              <a href="#services">View Our Process</a>
             </Button>
           </div>
         </div>

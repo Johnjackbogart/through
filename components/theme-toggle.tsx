@@ -4,6 +4,7 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useSyncExternalStore } from "react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 // Safe hydration hook that doesn't cause cascading renders
 function useHydrated() {
@@ -14,27 +15,40 @@ function useHydrated() {
   )
 }
 
-export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  const hydrated = useHydrated()
+export type ThemeToggleProps = {
+  showLabel?: boolean
+  label?: string
+  className?: string
+  onAfterToggle?: () => void
+}
 
-  if (!hydrated) {
-    return (
-      <Button variant="ghost" size="icon" className="w-9 h-9" aria-label="Toggle theme">
-        <Sun className="h-4 w-4" />
-      </Button>
-    )
-  }
+export function ThemeToggle({
+  showLabel = false,
+  label = "Toggle theme",
+  className,
+  onAfterToggle,
+}: ThemeToggleProps) {
+  const { resolvedTheme, setTheme } = useTheme()
+  const hydrated = useHydrated()
+  const isDark = hydrated ? resolvedTheme === "dark" : true
 
   return (
     <Button
       variant="ghost"
-      size="icon"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="w-9 h-9"
-      aria-label="Toggle theme"
+      size={showLabel ? "sm" : "icon"}
+      onClick={() => {
+        setTheme(isDark ? "light" : "dark")
+        onAfterToggle?.()
+      }}
+      className={cn(showLabel ? "w-full justify-start" : "w-9 h-9", className)}
+      aria-label={label}
     >
-      {theme === "dark" ? <Sun className="h-4 w-4 text-foreground" /> : <Moon className="h-4 w-4 text-foreground" />}
+      {isDark ? (
+        <Sun className="h-4 w-4 text-foreground" />
+      ) : (
+        <Moon className="h-4 w-4 text-foreground" />
+      )}
+      {showLabel ? <span>{label}</span> : null}
     </Button>
   )
 }

@@ -43,7 +43,7 @@ export function Footer() {
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#success-stories" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   About Us
                 </a>
               </li>
@@ -58,7 +58,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Contact
                 </a>
               </li>
