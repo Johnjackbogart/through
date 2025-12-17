@@ -4,19 +4,22 @@ import { ArrowUpRight } from "lucide-react"
 
 const projects = [
   {
-    title: "E-Commerce Platform",
-    category: "Web Development",
-    image: "/modern-ecommerce-interface.png",
+    title: "braign.io",
+    category: "Product Website",
+    url: "https://braign.io",
+    image: "/portfolio/braign.png",
   },
   {
-    title: "AI Analytics Dashboard",
-    category: "AI Integration",
-    image: "/analytics-dashboard.png",
+    title: "r.technology",
+    category: "Consultancy Website",
+    url: "https://r.technology",
+    image: "/portfolio/r.png",
   },
   {
-    title: "Brand Identity System",
-    category: "Brand Design",
-    image: "/brand-identity-design-mockup.jpg",
+    title: "johnjackbogart.com",
+    category: "Personal Site",
+    url: "https://johnjackbogart.com",
+    image: "/portfolio/jjb.png",
   },
   {
     title: "Mobile Banking App",
@@ -41,28 +44,35 @@ export function Portfolio() {
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <Card
+            <a
               key={index}
-              className="group overflow-hidden border-2 border-[#252525]/50 hover:shadow-xl transition-all cursor-pointer bg-card/25 backdrop-blur-md"
+              href={project.url ?? undefined}
+              target={project.url ? "_blank" : undefined}
+              rel={project.url ? "noreferrer" : undefined}
+              className="group block"
             >
-              <div className="relative overflow-hidden aspect-[3/2]">
-                <Image
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-4 right-4 w-10 h-10 bg-primary rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ArrowUpRight className="w-5 h-5 text-primary-primary" />
+              <Card className="overflow-hidden border-2 border-[#252525]/50 hover:shadow-xl transition-all cursor-pointer bg-card/25 backdrop-blur-md">
+                <div className="relative overflow-hidden aspect-[3/2]">
+                  <Image
+                    src={project.image || "/placeholder.svg"}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {project.url ? (
+                    <div className="absolute bottom-4 right-4 w-10 h-10 bg-primary rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowUpRight className="w-5 h-5 text-primary-primary" />
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-              <div className="p-6 bg-card/25 backdrop-blur-md">
-                <p className="text-sm text-muted-foreground font-medium mb-2">{project.category}</p>
-                <h3 className="text-xl font-semibold text-card-primary">{project.title}</h3>
-              </div>
-            </Card>
+                <div className="p-6 bg-card/25 backdrop-blur-md">
+                  <p className="text-sm text-muted-foreground font-medium mb-2">{project.category}</p>
+                  <h3 className="text-xl font-semibold text-card-primary">{project.title}</h3>
+                </div>
+              </Card>
+            </a>
           ))}
         </div>
       </div>
