@@ -4,9 +4,9 @@ import { useEffect } from "react";
 
 type DevtoolsHook = {
   renderers?: Map<unknown, unknown> & {
-    forEach?: (callback: (renderer: unknown) => void) => void;
+    forEach?: (_callback: (_renderer: unknown) => void) => void;
   };
-  inject?: (renderer: unknown) => unknown;
+  inject?: (..._args: unknown[]) => unknown;
   __semverGuardPatched?: boolean;
 };
 
@@ -47,9 +47,9 @@ export function DevtoolsVersionGuard() {
 
     if (typeof hook.inject === "function") {
       const originalInject = hook.inject;
-      hook.inject = function injectWithGuard(renderer: unknown) {
-        ensureVersion(renderer);
-        return originalInject.apply(this, arguments as any);
+      hook.inject = function injectWithGuard(...args: unknown[]) {
+        ensureVersion(args[0]);
+        return originalInject.apply(this, args);
       };
     }
   }, []);

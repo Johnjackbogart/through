@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "#/card";
 import { Sparkles, Code, Palette, GlobeLock } from "lucide-react";
 import { bbhBartle } from "@/lib/fonts";
 

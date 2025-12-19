@@ -3,7 +3,7 @@
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useSyncExternalStore } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "#/button"
 import { cn } from "@/lib/utils"
 
 // Safe hydration hook that doesn't cause cascading renders

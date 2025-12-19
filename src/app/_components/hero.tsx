@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/button";
 import { ArrowRight } from "lucide-react";
-import { MeshGradient } from "@/components/mesh-gradient";
+import { MeshGradient } from "&/mesh-gradient";
 import { bbhBartle } from "@/lib/fonts";
 
 // Lazy load the heavy 3D component to improve initial page load
@@ -93,7 +93,7 @@ export function Hero() {
           </h1>
 
           <p className="text-lg md:text-xl font-light text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
-            We're a multidisciplinary team of consultants dedicated to
+            We&apos;re a multidisciplinary team of consultants dedicated to
             exceptional client service across IT/Security, Software, and
             Marketing
           </p>

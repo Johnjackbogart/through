@@ -30,6 +30,16 @@ const INNER_FIELD_BOUNDS = 2.25;
 const OUTER_FIELD_BOUNDS = 3.5;
 const WALL_EXTENT = 4;
 
+function createDeterministicRng(seed: number) {
+  let state = seed >>> 0;
+  return () => {
+    state += 0x6d2b79f5;
+    let value = Math.imul(state ^ (state >>> 15), 1 | state);
+    value ^= value + Math.imul(value ^ (value >>> 7), 61 | value);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 interface FieldMarchingCubeProps {
   marchingRef: RefObject<MarchingCubesType | null>;
   bounds: number;
@@ -550,7 +560,9 @@ function Pointer({ vec = new THREE.Vector3() }: PointerProps) {
 
 export default function Metaball3D() {
   const [canvasKey, setCanvasKey] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
+  const [visibleForCanvasKey, setVisibleForCanvasKey] = useState<number | null>(
+    null,
+  );
   const [eventSource] = useState<HTMLElement>(() => document.body);
   const innerMarchingRef = useRef<MarchingCubesType | null>(null);
   const outerMarchingRef = useRef<MarchingCubesType | null>(null);
@@ -560,28 +572,33 @@ export default function Metaball3D() {
   }, []);
 
   useEffect(() => {
-    setIsVisible(false);
-    const id = requestAnimationFrame(() => setIsVisible(true));
+    const id = requestAnimationFrame(() => setVisibleForCanvasKey(canvasKey));
     return () => cancelAnimationFrame(id);
   }, [canvasKey]);
+  
+  const isVisible = visibleForCanvasKey === canvasKey;
 
   const innerInitialPositions = useMemo(
-    () =>
-      Array.from({ length: 10 }, () => [
-        Math.random() * 0.5 - 0.25,
-        Math.random() * 0.5 - 0.25,
+    () => {
+      const rng = createDeterministicRng(12345);
+      return Array.from({ length: 10 }, () => [
+        rng() * 0.5 - 0.25,
+        rng() * 0.5 - 0.25,
         0,
-      ]) as [number, number, number][],
+      ]) as [number, number, number][];
+    },
     [],
   );
 
   const outerInitialPositions = useMemo(
-    () =>
-      Array.from({ length: 6 }, () => [
-        Math.random() * 1.5 - 0.75,
-        Math.random() * 1.5 - 0.75,
-        Math.random() * 0.5 - 0.25,
-      ]) as [number, number, number][],
+    () => {
+      const rng = createDeterministicRng(67890);
+      return Array.from({ length: 6 }, () => [
+        rng() * 1.5 - 0.75,
+        rng() * 1.5 - 0.75,
+        rng() * 0.5 - 0.25,
+      ]) as [number, number, number][];
+    },
     [],
   );
 

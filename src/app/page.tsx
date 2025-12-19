@@ -1,11 +1,11 @@
-import { Header } from "@/components/header"
-import { Hero } from "@/components/hero"
-import { Services } from "@/components/services"
-import { Portfolio } from "@/components/portfolio"
-import { Testimonials } from "@/components/testimonials"
-import { CTA } from "@/components/cta"
-import { Contact } from "@/components/contact"
-import { Footer } from "@/components/footer"
+import { Header } from "&/header"
+import { Hero } from "&/hero"
+import { Services } from "&/services"
+import { Portfolio } from "&/portfolio"
+import { Testimonials } from "&/testimonials"
+import { CTA } from "&/cta"
+import { Contact } from "&/contact"
+import { Footer } from "&/footer"
 
 export default function Home() {
   return (

@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card"
+import { Card } from "#/card"
 import { Star } from "lucide-react"
 import { bbhBartle } from "@/lib/fonts"
 
