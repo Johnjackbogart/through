@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card"
 import { Star } from "lucide-react"
+import { bbhBartle } from "@/lib/fonts"
 
 const testimonials = [
   {
@@ -32,7 +33,9 @@ export function Testimonials() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 text-balance">
+          <h2
+            className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-foreground mb-4 text-balance tracking-tight`}
+          >
             Client Success Stories
           </h2>
           <p className="text-lg text-muted-foreground text-pretty leading-relaxed">

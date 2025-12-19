@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/button";
+import { bbhBartle } from "@/lib/fonts";
 
 export function Contact() {
   const [submitted, setSubmitted] = React.useState(false);
@@ -14,12 +15,14 @@ export function Contact() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-4xl mx-auto bg-card/60 backdrop-blur-md rounded-2xl p-8 sm:p-10 lg:p-12 border-2 border-primary/40">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-balance">
+            <h2
+              className={`${bbhBartle.className} text-3xl md:text-4xl font-normal mb-3 text-balance tracking-tight`}
+            >
               Contact us
             </h2>
             <p className="text-muted-foreground mb-8 text-pretty leading-relaxed">
-              Tell us what you’re building and we’ll follow up within 1–2 business
-              days.
+              Tell us what you’re building and we’ll follow up within 1–2
+              business days.
             </p>
           </div>
 
@@ -82,7 +85,10 @@ export function Contact() {
               ) : (
                 <p className="text-sm text-muted-foreground">
                   Or email{" "}
-                  <a className="underline hover:text-foreground" href="mailto:hello@through.tech">
+                  <a
+                    className="underline hover:text-foreground"
+                    href="mailto:hello@through.tech"
+                  >
                     hello@through.tech
                   </a>
                 </p>

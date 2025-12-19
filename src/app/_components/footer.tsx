@@ -1,10 +1,12 @@
+import { baskervville } from "@/lib/fonts";
+
 export function Footer() {
   return (
     <footer className="border-t border-border bg-muted/50 backdrop-blur-sm relative z-20">
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className={`${baskervville.className} flex items-center gap-2 mb-4`}>
               <div className="w-8 h-8 bg-primary rounded-sm" />
               <span className="font-semibold text-lg text-foreground">Studio</span>
             </div>

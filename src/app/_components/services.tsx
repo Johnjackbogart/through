@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sparkles, Code, Palette, GlobeLock } from "lucide-react";
+import { bbhBartle } from "@/lib/fonts";
 
 const services = [
   {
@@ -36,7 +37,9 @@ export function Services() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 text-balance">
+          <h2
+            className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-primary mb-4 text-balance tracking-tight`}
+          >
             Services That Drive Results
           </h2>
           <p className="text-lg text-muted-foreground text-pretty leading-relaxed">

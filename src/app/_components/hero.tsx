@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { MeshGradient } from "@/components/mesh-gradient";
+import { bbhBartle } from "@/lib/fonts";
 
 // Lazy load the heavy 3D component to improve initial page load
 const Metaball3D = dynamic(() => import("./metaball3d"), {
@@ -85,11 +86,13 @@ export function Hero() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white/90 mb-6 text-balance leading-tight">
+          <h1
+            className={`${bbhBartle.className} text-4xl md:text-5xl lg:text-7xl font-normal text-white/90 mb-6 text-balance leading-tight tracking-tight`}
+          >
             The Way is Through
           </h1>
 
-          <p className="text-lg md:text-xl text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl font-light text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
             We're a multidisciplinary team of consultants dedicated to
             exceptional client service across IT/Security, Software, and
             Marketing

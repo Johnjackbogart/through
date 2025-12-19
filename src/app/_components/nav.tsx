@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { baskervville } from "@/lib/fonts";
+import { ibmPlexSans } from "@/lib/fonts";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
@@ -10,10 +12,13 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const navLinkClassName =
+    "relative inline-flex w-fit items-center pb-1 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-md ">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-16 lg:h-20 p-4 border-b border-border/50">
           <Link
             href="/"
             className="flex items-center gap-2"
@@ -21,34 +26,26 @@ export function Header() {
             onClick={closeMenu}
           >
             <div className="w-8 h-8 bg-primary rounded-sm" />
-            <span className="font-semibold text-lg text-foreground">
+            <span
+              className={`${baskervville.className} font-semibold text-lg text-foreground`}
+            >
               Through
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <a
-              href="#services"
-              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-            >
+          <nav
+            className={`${ibmPlexSans.className} hidden md:flex items-center gap-8`}
+          >
+            <a href="#services" className={navLinkClassName}>
               Services
             </a>
-            <a
-              href="#portfolio"
-              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-            >
+            <a href="#portfolio" className={navLinkClassName}>
               Portfolio
             </a>
-            <a
-              href="#success-stories"
-              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-            >
+            <a href="#success-stories" className={navLinkClassName}>
               About
             </a>
-            <a
-              href="#contact"
-              className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-            >
+            <a href="#contact" className={navLinkClassName}>
               Contact
             </a>
           </nav>
@@ -57,7 +54,7 @@ export function Header() {
             <ThemeToggle />
             <Button
               asChild
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90`}
             >
               <a href="#contact">Get Started</a>
             </Button>
@@ -73,40 +70,40 @@ export function Header() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <nav className="flex flex-col gap-4">
+          <div className="md:hidden py-4 border-t border-border bg-background/90 backdrop-blur-md">
+            <nav className={`${ibmPlexSans.className} flex flex-col gap-4`}>
               <a
                 href="#services"
                 onClick={closeMenu}
-                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+                className={navLinkClassName}
               >
                 Services
               </a>
               <a
                 href="#portfolio"
                 onClick={closeMenu}
-                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+                className={navLinkClassName}
               >
                 Portfolio
               </a>
               <a
                 href="#success-stories"
                 onClick={closeMenu}
-                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+                className={navLinkClassName}
               >
                 About
               </a>
               <a
                 href="#contact"
                 onClick={closeMenu}
-                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+                className={navLinkClassName}
               >
                 Contact
               </a>
               <ThemeToggle showLabel onAfterToggle={closeMenu} />
               <Button
                 asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90 w-full"
+                className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90 w-full`}
               >
                 <a href="#contact" onClick={closeMenu}>
                   Get Started
