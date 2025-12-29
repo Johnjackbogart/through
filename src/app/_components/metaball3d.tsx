@@ -29,6 +29,8 @@ interface LiquidGlassUniforms {
 const INNER_FIELD_BOUNDS = 2.25;
 const OUTER_FIELD_BOUNDS = 3.5;
 const WALL_EXTENT = 4;
+const METABALL_TIME_SCALE = 0.35;
+const METABALL_IMPULSE_SCALE = 0.5;
 
 function createDeterministicRng(seed: number) {
   let state = seed >>> 0;
@@ -109,6 +111,7 @@ function FieldMarchingCube({
 // Custom shader material with intense refraction for liquid glass effect
 function LiquidGlassMaterial() {
   const materialRef = useRef<THREE.ShaderMaterial & { uniforms: LiquidGlassUniforms }>(null);
+  const timeRef = useRef(0);
 
   const shader = useMemo(
     () => ({
@@ -265,9 +268,11 @@ function LiquidGlassMaterial() {
     [],
   );
 
-  useFrame((state) => {
+  useFrame((_, delta) => {
     if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime;
+      const timeStep = Math.min(delta, 0.05) * METABALL_TIME_SCALE;
+      timeRef.current += timeStep;
+      materialRef.current.uniforms.time.value = timeRef.current;
     }
   });
 
@@ -301,17 +306,16 @@ function MetaBall({
 }: MarchingBallProps) {
   const api = useRef<RapierRigidBody>(null);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (float && api.current) {
-      delta = Math.min(delta, 0.1);
-      delta *= 0.005;
+      const motionDelta = Math.min(delta, 0.1) * 0.005 * METABALL_IMPULSE_SCALE;
       const translation = api.current.translation();
       if (translation) {
         api.current.applyImpulse(
           vec
             .copy(translation)
             .normalize()
-            .multiplyScalar(delta * -0.005),
+            .multiplyScalar(motionDelta * -0.005),
           true,
         );
       }
@@ -351,11 +355,10 @@ function RandomMetaBall({
   const timeRef = useRef<number>(0);
   const targetRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (api.current) {
-      delta = Math.min(delta, 0.01);
-      delta *= 0.005;
-      timeRef.current += delta;
+      const baseDelta = Math.min(delta, 0.01) * 0.005;
+      timeRef.current += baseDelta;
 
       // Change direction every 2-4 seconds
       if (timeRef.current > 2 + Math.random() * 2) {
@@ -374,7 +377,7 @@ function RandomMetaBall({
           .copy(targetRef.current)
           .sub(translation)
           .normalize()
-          .multiplyScalar(delta * 0.015);
+          .multiplyScalar(baseDelta * 0.015 * METABALL_IMPULSE_SCALE);
 
         api.current.applyImpulse(impulse, true);
       }
@@ -449,7 +452,7 @@ function PoppingMetaBall({
   }, [warpToRandomPosition]);
 
   useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05);
+    const dt = Math.min(delta, 0.05) * METABALL_TIME_SCALE;
     timerRef.current += dt;
 
     switch (phaseRef.current) {

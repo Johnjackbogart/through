@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "dev:ts": "concurrently -k -n next,tsc \"bun run dev\" \"bun run ts:watch\"",
+    "dev:ts": "concurrently --kill-others-on-fail -n next,tsc \"bun run dev\" \"bun run ts:watch\"",
     "lint": "eslint .",
     "start": "next start",
     "ts": "tsc --noEmit",

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "#/button";
 import { ThemeToggle } from "&/theme-toggle";
 import { baskervville } from "@/lib/fonts";
@@ -25,11 +26,17 @@ export function Header() {
             aria-label="Go to home page"
             onClick={closeMenu}
           >
-            <div className="w-8 h-8 bg-primary rounded-sm" />
+            <Image
+              src="/logo.svg"
+              alt="Through logo"
+              width={32}
+              height={32}
+              className="w-12 h-12 bg-white/75 rounded-sm p-1 border-white"
+            />
             <span
               className={`${baskervville.className} font-semibold text-lg text-foreground`}
             >
-              Through
+              Through.tech
             </span>
           </Link>
 
