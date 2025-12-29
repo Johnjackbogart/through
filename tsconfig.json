@@ -23,8 +23,26 @@
       }
     ],
     "paths": {
-      "@/*": [
+      "!/*": [
         "./*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "~/*": [
+        "./src/app/*"
+      ],
+      "&/*": [
+        "./src/app/_components/*"
+      ],
+      "#/*": [
+        "./src/app/_components/ui/*"
+      ],
+      "^/*": [
+        "./src/app/_components/logos/*"
+      ],
+      "+/*": [
+        "./src/server/api/*"
       ]
     }
   },
@@ -36,6 +54,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next/types/validator.ts"
   ]
 }

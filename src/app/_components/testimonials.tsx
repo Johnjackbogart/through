@@ -1,5 +1,6 @@
-import { Card } from "@/components/ui/card"
+import { Card } from "#/card"
 import { Star } from "lucide-react"
+import { bbhBartle } from "@/lib/fonts"
 
 const testimonials = [
   {
@@ -26,20 +27,25 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 lg:py-32 relative z-20 bg-muted/20">
+    <section
+      id="success-stories"
+      className="scroll-mt-24 py-20 lg:py-32 relative z-20 bg-muted/20"
+    >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white/75 mb-4 text-balance">
+          <h2
+            className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-foreground mb-4 text-balance tracking-tight`}
+          >
             Client Success Stories
           </h2>
-          <p className="text-lg text-white/50 text-pretty leading-relaxed">
+          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
             Don&apos;t just take our word for it. Here&apos;s what our clients have to say about working with us.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="p-6 bg-card/25 backdrop-blur-md border-2 border-[#252525]/50">
+            <Card key={index} className="p-6 bg-card/60 backdrop-blur-md border-2 border-border/60">
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-primary text-primary" />

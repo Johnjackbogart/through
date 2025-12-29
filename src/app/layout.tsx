@@ -1,13 +1,13 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "&/theme-provider";
 import "./globals.css";
 import { IBM_Plex_Mono } from "next/font/google";
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: "100",
+  weight: ["300", "400", "500"],
 });
 
 export const metadata: Metadata = {

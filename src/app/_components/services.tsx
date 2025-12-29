@@ -1,5 +1,6 @@
-import { Card } from "@/components/ui/card"
-import { Sparkles, Code, Palette, Zap } from "lucide-react"
+import { Card } from "#/card";
+import { Sparkles, Code, Palette, GlobeLock } from "lucide-react";
+import { bbhBartle } from "@/lib/fonts";
 
 const services = [
   {
@@ -21,24 +22,29 @@ const services = [
       "Create memorable brand identities with sophisticated visual design that resonates with your target audience and stands out.",
   },
   {
-    icon: Zap,
-    title: "Performance Optimization",
+    icon: GlobeLock,
+    title: "Security",
     description:
       "Maximize speed and efficiency with expert optimization techniques that deliver lightning-fast experiences across all devices.",
   },
-]
+];
 
 export function Services() {
   return (
-    <section id="services" className="py-20 lg:py-32 relative z-20 bg-muted/20">
+    <section
+      id="services"
+      className="scroll-mt-24 py-20 lg:py-32 relative z-20 bg-muted/20"
+    >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 text-balance">
+          <h2
+            className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-primary mb-4 text-balance tracking-tight`}
+          >
             Services That Drive Results
           </h2>
-          <p className="text-lg text-white/50 text-pretty leading-relaxed">
-            Comprehensive solutions tailored to your unique needs, powered by the latest technology and creative
-            expertise.
+          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
+            Comprehensive solutions tailored to your unique needs, powered by
+            the latest technology and creative expertise.
           </p>
         </div>
 
@@ -46,17 +52,21 @@ export function Services() {
           {services.map((service, index) => (
             <Card
               key={index}
-              className="p-6 bg-card/25 backdrop-blur-md border-2 border-[#252525]/50 hover:shadow-lg transition-shadow"
+              className="p-6 bg-card/60 backdrop-blur-md border-2 border-border/60 hover:shadow-lg transition-shadow"
             >
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <service.icon className="w-6 h-6 text-white/75" />
+                <service.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold text-card-foreground mb-3">{service.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+              <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                {service.title}
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {service.description}
+              </p>
             </Card>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

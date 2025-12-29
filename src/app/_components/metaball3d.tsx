@@ -29,6 +29,18 @@ interface LiquidGlassUniforms {
 const INNER_FIELD_BOUNDS = 2.25;
 const OUTER_FIELD_BOUNDS = 3.5;
 const WALL_EXTENT = 4;
+const METABALL_TIME_SCALE = 0.35;
+const METABALL_IMPULSE_SCALE = 0.5;
+
+function createDeterministicRng(seed: number) {
+  let state = seed >>> 0;
+  return () => {
+    state += 0x6d2b79f5;
+    let value = Math.imul(state ^ (state >>> 15), 1 | state);
+    value ^= value + Math.imul(value ^ (value >>> 7), 61 | value);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 interface FieldMarchingCubeProps {
   marchingRef: RefObject<MarchingCubesType | null>;
@@ -70,6 +82,8 @@ function FieldMarchingCube({
   const vec = useMemo(() => new THREE.Vector3(), []);
   const ballColor = useMemo(() => new THREE.Color(color), [color]);
 
+  // Run before drei's MarchingCubes update/reset (which uses priority -1),
+  // otherwise the first frame renders empty and can "flash" on mount.
   useFrame(() => {
     if (!marchingRef.current || !cubeRef.current) return;
     cubeRef.current.getWorldPosition(vec);
@@ -89,7 +103,7 @@ function FieldMarchingCube({
       subtract,
       ballColor,
     );
-  });
+  }, -1.5);
 
   return <group ref={cubeRef} />;
 }
@@ -97,6 +111,7 @@ function FieldMarchingCube({
 // Custom shader material with intense refraction for liquid glass effect
 function LiquidGlassMaterial() {
   const materialRef = useRef<THREE.ShaderMaterial & { uniforms: LiquidGlassUniforms }>(null);
+  const timeRef = useRef(0);
 
   const shader = useMemo(
     () => ({
@@ -253,9 +268,11 @@ function LiquidGlassMaterial() {
     [],
   );
 
-  useFrame((state) => {
+  useFrame((_, delta) => {
     if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime;
+      const timeStep = Math.min(delta, 0.05) * METABALL_TIME_SCALE;
+      timeRef.current += timeStep;
+      materialRef.current.uniforms.time.value = timeRef.current;
     }
   });
 
@@ -289,17 +306,16 @@ function MetaBall({
 }: MarchingBallProps) {
   const api = useRef<RapierRigidBody>(null);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (float && api.current) {
-      delta = Math.min(delta, 0.1);
-      delta *= 0.005;
+      const motionDelta = Math.min(delta, 0.1) * 0.005 * METABALL_IMPULSE_SCALE;
       const translation = api.current.translation();
       if (translation) {
         api.current.applyImpulse(
           vec
             .copy(translation)
             .normalize()
-            .multiplyScalar(delta * -0.005),
+            .multiplyScalar(motionDelta * -0.005),
           true,
         );
       }
@@ -339,11 +355,10 @@ function RandomMetaBall({
   const timeRef = useRef<number>(0);
   const targetRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (api.current) {
-      delta = Math.min(delta, 0.01);
-      delta *= 0.005;
-      timeRef.current += delta;
+      const baseDelta = Math.min(delta, 0.01) * 0.005;
+      timeRef.current += baseDelta;
 
       // Change direction every 2-4 seconds
       if (timeRef.current > 2 + Math.random() * 2) {
@@ -362,7 +377,7 @@ function RandomMetaBall({
           .copy(targetRef.current)
           .sub(translation)
           .normalize()
-          .multiplyScalar(delta * 0.015);
+          .multiplyScalar(baseDelta * 0.015 * METABALL_IMPULSE_SCALE);
 
         api.current.applyImpulse(impulse, true);
       }
@@ -437,7 +452,7 @@ function PoppingMetaBall({
   }, [warpToRandomPosition]);
 
   useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05);
+    const dt = Math.min(delta, 0.05) * METABALL_TIME_SCALE;
     timerRef.current += dt;
 
     switch (phaseRef.current) {
@@ -548,7 +563,10 @@ function Pointer({ vec = new THREE.Vector3() }: PointerProps) {
 
 export default function Metaball3D() {
   const [canvasKey, setCanvasKey] = useState(0);
-  const [eventSource, setEventSource] = useState<HTMLElement | undefined>(undefined);
+  const [visibleForCanvasKey, setVisibleForCanvasKey] = useState<number | null>(
+    null,
+  );
+  const [eventSource] = useState<HTMLElement>(() => document.body);
   const innerMarchingRef = useRef<MarchingCubesType | null>(null);
   const outerMarchingRef = useRef<MarchingCubesType | null>(null);
 
@@ -557,8 +575,35 @@ export default function Metaball3D() {
   }, []);
 
   useEffect(() => {
-    setEventSource(document.body);
-  }, []);
+    const id = requestAnimationFrame(() => setVisibleForCanvasKey(canvasKey));
+    return () => cancelAnimationFrame(id);
+  }, [canvasKey]);
+  
+  const isVisible = visibleForCanvasKey === canvasKey;
+
+  const innerInitialPositions = useMemo(
+    () => {
+      const rng = createDeterministicRng(12345);
+      return Array.from({ length: 10 }, () => [
+        rng() * 0.5 - 0.25,
+        rng() * 0.5 - 0.25,
+        0,
+      ]) as [number, number, number][];
+    },
+    [],
+  );
+
+  const outerInitialPositions = useMemo(
+    () => {
+      const rng = createDeterministicRng(67890);
+      return Array.from({ length: 6 }, () => [
+        rng() * 1.5 - 0.75,
+        rng() * 1.5 - 0.75,
+        rng() * 0.5 - 0.25,
+      ]) as [number, number, number][];
+    },
+    [],
+  );
 
   return (
     <Canvas
@@ -568,11 +613,18 @@ export default function Metaball3D() {
       camera={{ position: [0, 0, 5], zoom: 600, fov: 180 }}
       gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
       eventSource={eventSource}
-      style={{ background: "transparent", width: "100%", height: "100%" }}
+      style={{
+        background: "transparent",
+        width: "100%",
+        height: "100%",
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 200ms ease",
+        willChange: "opacity",
+      }}
     >
       <WebGLContextLossHandler onLost={handleContextLost} />
       <ambientLight intensity={1} />
-      <Physics gravity={[0, -0.0005, 0]}>
+      <Physics gravity={[0, -0.0005, 0]} updatePriority={-2}>
         <MarchingCubes
           ref={innerMarchingRef}
           scale={0.8}
@@ -582,8 +634,7 @@ export default function Metaball3D() {
           enableColors
         >
           <LiquidGlassMaterial />
-          {/* eslint-disable react-hooks/purity -- Random positions are intentional for initial physics state */}
-          {Array.from({ length: 10 }, (_, index) => (
+          {innerInitialPositions.map((position, index) => (
             <MetaBall
               float
               strength={1}
@@ -591,14 +642,9 @@ export default function Metaball3D() {
               color="#ffffff"
               marchingRef={innerMarchingRef}
               bounds={INNER_FIELD_BOUNDS}
-              position={[
-                Math.random() * 0.5 - 0.25,
-                Math.random() * 0.5 - 0.25,
-                0,
-              ]}
+              position={position}
             />
           ))}
-          {/* eslint-enable react-hooks/purity */}
           <RandomMetaBall
             strength={1.2}
             color="#ffffff"
@@ -653,8 +699,7 @@ export default function Metaball3D() {
             transparent
             opacity={0.6}
           />
-          {/* eslint-disable react-hooks/purity -- Random positions are intentional for initial physics state */}
-          {Array.from({ length: 6 }, (_, index) => (
+          {outerInitialPositions.map((position, index) => (
             <MetaBall
               float
               strength={1.0}
@@ -662,14 +707,9 @@ export default function Metaball3D() {
               color="#ffffff"
               marchingRef={outerMarchingRef}
               bounds={OUTER_FIELD_BOUNDS}
-              position={[
-                Math.random() * 1.5 - 0.75,
-                Math.random() * 1.5 - 0.75,
-                Math.random() * 0.5 - 0.25,
-              ]}
+              position={position}
             />
           ))}
-          {/* eslint-enable react-hooks/purity */}
           <RandomMetaBall
             strength={0.9}
             color="#ffffff"

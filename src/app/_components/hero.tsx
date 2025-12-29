@@ -1,9 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/button";
 import { ArrowRight } from "lucide-react";
-import { MeshGradient } from "@paper-design/shaders-react";
+import { MeshGradient } from "&/mesh-gradient";
+import { bbhBartle } from "@/lib/fonts";
 
 // Lazy load the heavy 3D component to improve initial page load
 const Metaball3D = dynamic(() => import("./metaball3d"), {
@@ -85,23 +86,28 @@ export function Hero() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white/90 mb-6 text-balance leading-tight">
+          <h1
+            className={`${bbhBartle.className} text-4xl md:text-5xl lg:text-7xl font-normal text-white/90 mb-6 text-balance leading-tight tracking-tight`}
+          >
             The Way is Through
           </h1>
 
-          <p className="text-5xl md:text-xl text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
-            We're a multidisciplinary team of consultants dedicated to
+          <p className="text-lg md:text-xl font-light text-white/95 mb-10 max-w-2xl mx-auto leading-relaxed">
+            We&apos;re a multidisciplinary team of consultants dedicated to
             exceptional client service across IT/Security, Software, and
             Marketing
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto">
             <Button
+              asChild
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 group"
             >
-              Start Your Project
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <a href="#contact">
+                Start Your Project
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
           </div>
         </div>
