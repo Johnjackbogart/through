@@ -22,11 +22,11 @@ const projects = [
     url: "https://johnjackbogart.com",
     image: "/portfolio/jjb.png",
   },
-  {
-    title: "Mobile Banking App",
-    category: "App Development",
-    image: "/mobile-banking-app.png",
-  },
+  // {
+  //   title: "Mobile Banking App",
+  //   category: "App Development",
+  //   image: "/mobile-banking-app.png",
+  // },
 ]
 
 export function Portfolio() {
@@ -39,6 +39,11 @@ export function Portfolio() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2
             className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-foreground mb-4 text-balance tracking-tight`}
+            style={{
+              WebkitTextStroke: "1px var(--card)",
+              textShadow:
+                "0 1px 0 var(--card), 1px 0 0 var(--card), 0 -1px 0 var(--card), -1px 0 0 var(--card)",
+            }}
           >
             Featured Work
           </h2>
@@ -47,7 +52,7 @@ export function Portfolio() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <a
               key={index}
@@ -62,7 +67,7 @@ export function Portfolio() {
                     src={project.image || "/placeholder.svg"}
                     alt={project.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

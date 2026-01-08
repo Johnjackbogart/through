@@ -9,6 +9,11 @@ export function CTA() {
         <div className="max-w-4xl mx-auto text-center bg-card/60 backdrop-blur-md rounded-2xl p-12 lg:p-16 border-2 border-primary/40">
           <h2
             className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-foreground mb-6 text-balance tracking-tight`}
+            style={{
+              WebkitTextStroke: "1px var(--card)",
+              textShadow:
+                "0 1px 0 var(--card), 1px 0 0 var(--card), 0 -1px 0 var(--card), -1px 0 0 var(--card)",
+            }}
           >
             Ready to Start Your Project?
           </h2>

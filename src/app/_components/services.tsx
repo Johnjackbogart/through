@@ -37,14 +37,26 @@ export function Services() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="inline-block mb-6">
+            <span className="text-xs font-medium text-primary uppercase tracking-wider px-3 py-1 bg-primary/10 rounded-full border border-border/60">
+              An AI powered tech consultancy
+            </span>
+          </div>
           <h2
             className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-primary mb-4 text-balance tracking-tight`}
+            style={{
+              WebkitTextStroke: "1px var(--card)",
+              textShadow:
+                "0 1px 0 var(--card), 1px 0 0 var(--card), 0 -1px 0 var(--card), -1px 0 0 var(--card)",
+            }}
           >
-            Services That Drive Results
+            Offerings from <br />
+            A <br />
+            through
+            <br />Z
           </h2>
           <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
-            Comprehensive solutions tailored to your unique needs, powered by
-            the latest technology and creative expertise.
+            If it involves a computer, we can help.
           </p>
         </div>
 
@@ -66,6 +78,11 @@ export function Services() {
             </Card>
           ))}
         </div>
+{/*        <div className="max-w-3xl mx-auto text-center mb-16">
+          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">
+            Add COPY HERE
+          </p>
+        </div> */}
       </div>
     </section>
   );

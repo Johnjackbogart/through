@@ -35,6 +35,11 @@ export function Testimonials() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2
             className={`${bbhBartle.className} text-3xl md:text-4xl lg:text-5xl font-normal text-foreground mb-4 text-balance tracking-tight`}
+            style={{
+              WebkitTextStroke: "1px var(--card)",
+              textShadow:
+                "0 1px 0 var(--card), 1px 0 0 var(--card), 0 -1px 0 var(--card), -1px 0 0 var(--card)",
+            }}
           >
             Client Success Stories
           </h2>
