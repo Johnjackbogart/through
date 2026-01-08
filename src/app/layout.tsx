@@ -15,6 +15,47 @@ export const metadata: Metadata = {
   description: "Your new partner in tech",
 };
 
+// app/layout.tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://through.tech"),
+  title: {
+    default: "Through.tech",
+    template: "%s | Through.tech",
+  },
+  description: "Lets get through it.",
+  openGraph: {
+    type: "website",
+    siteName: "Through.tech",
+    url: "https://through.tech",
+    title: "Through.tech",
+    description: "Lets get through it",
+    images: [
+      {
+        url: "/preview.png", // resolves to https://through.tech/og-image.jpg because of metadataBase
+        width: 1200,
+        height: 630,
+        alt: "Through.tech preview image",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Through.tech",
+    description: "Lets get throigh it",
+    images: ["/preview.png"],
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
