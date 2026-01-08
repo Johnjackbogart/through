@@ -80,14 +80,13 @@ export function Hero() {
 
       <div className="container mx-auto px-4 lg:px-8 relative z-20 pointer-events-none">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block mb-6">
-            <span className="text-xs font-medium text-primary uppercase tracking-wider px-3 py-1 bg-primary/10 rounded-full">
-              An AI powered tech consultancy
-            </span>
-          </div>
-
           <h1
             className={`${bbhBartle.className} text-4xl md:text-5xl lg:text-7xl font-normal text-white/90 mb-6 text-balance leading-tight tracking-tight`}
+            style={{
+              WebkitTextStroke: "1px var(--card)",
+              textShadow:
+                "0 1px 0 var(--card), 1px 0 0 var(--card), 0 -1px 0 var(--card), -1px 0 0 var(--card)",
+            }}
           >
             The Way is Through
           </h1>
@@ -99,11 +98,12 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto">
-            <Button
-              asChild
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 group"
-            >
+              <Button
+                asChild
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 group border border-border/60"
+              >
+
               <a href="#contact">
                 Start Your Project
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

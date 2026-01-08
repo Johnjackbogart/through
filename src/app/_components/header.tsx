@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Button } from "#/button";
 import { ThemeToggle } from "&/theme-toggle";
 import { baskervville } from "@/lib/fonts";
-import { ibmPlexSans } from "@/lib/fonts";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
@@ -14,7 +13,7 @@ export function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   const navLinkClassName =
-    "relative inline-flex w-fit items-center pb-1 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100";
+    "relative inline-flex w-fit items-center pb-1 text-sm font-medium text-white/90 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-md ">
@@ -31,17 +30,17 @@ export function Header() {
               alt="Through logo"
               width={32}
               height={32}
-              className="w-12 h-12 bg-white/75 rounded-sm p-1 border-white"
+              className="w-12 h-12 bg-white/75 rounded-sm p-1 border border-border/60"
             />
             <span
-              className={`${baskervville.className} font-semibold text-lg text-foreground`}
+              className={`${baskervville.className} font-semibold text-lg text-white/90`}
             >
               Through.tech
             </span>
           </Link>
 
           <nav
-            className={`${ibmPlexSans.className} hidden md:flex items-center gap-8`}
+            className={`${baskervville.className} hidden md:flex items-center gap-8`}
           >
             <a href="#services" className={navLinkClassName}>
               Services
@@ -49,9 +48,9 @@ export function Header() {
             <a href="#portfolio" className={navLinkClassName}>
               Portfolio
             </a>
-            <a href="#success-stories" className={navLinkClassName}>
+{/*            <a href="#success-stories" className={navLinkClassName}>
               About
-            </a>
+            </a> */}
             <a href="#contact" className={navLinkClassName}>
               Contact
             </a>
@@ -61,14 +60,14 @@ export function Header() {
             <ThemeToggle />
             <Button
               asChild
-              className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90`}
+              className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90 border border-border/60`}
             >
               <a href="#contact">Get Started</a>
             </Button>
           </div>
 
           <button
-            className="md:hidden text-foreground"
+            className="md:hidden text-white/90"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -78,7 +77,7 @@ export function Header() {
 
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border bg-background/90 backdrop-blur-md">
-            <nav className={`${ibmPlexSans.className} flex flex-col gap-4`}>
+            <nav className={`${baskervville.className} flex flex-col gap-4`}>
               <a
                 href="#services"
                 onClick={closeMenu}
@@ -93,13 +92,13 @@ export function Header() {
               >
                 Portfolio
               </a>
-              <a
+{/*              <a
                 href="#success-stories"
                 onClick={closeMenu}
                 className={navLinkClassName}
               >
                 About
-              </a>
+              </a> */}
               <a
                 href="#contact"
                 onClick={closeMenu}
@@ -110,7 +109,7 @@ export function Header() {
               <ThemeToggle showLabel onAfterToggle={closeMenu} />
               <Button
                 asChild
-                className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90 w-full`}
+                className={`${baskervville.className} bg-primary text-primary-foreground hover:bg-primary/90 w-full border border-border/60`}
               >
                 <a href="#contact" onClick={closeMenu}>
                   Get Started

@@ -2,8 +2,8 @@ import { Header } from "&/header"
 import { Hero } from "&/hero"
 import { Services } from "&/services"
 import { Portfolio } from "&/portfolio"
-import { Testimonials } from "&/testimonials"
-import { CTA } from "&/cta"
+// import { Testimonials } from "&/testimonials"
+// import { CTA } from "&/cta"
 import { Contact } from "&/contact"
 import { Footer } from "&/footer"
 
@@ -14,8 +14,8 @@ export default function Home() {
       <Hero />
       <Services />
       <Portfolio />
-      <Testimonials />
-      <CTA />
+      {/* <Testimonials /> */}
+      {/* <CTA /> */}
       <Contact />
       <Footer />
     </main>
