@@ -25,8 +25,7 @@ export const metadata: Metadata = {
     description: "Lets get through it",
     images: [
       {
-        url: "/IMG_6426.jpeg" resolves to https://through.tech/og-image.jpg because of metadataBase
-        width: 1200,
+        url: "/IMG_6426.jpeg",
         height: 630,
         alt: "Through.tech preview image",
       },
