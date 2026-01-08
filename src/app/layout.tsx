@@ -11,11 +11,6 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Through",
-  description: "Your new partner in tech",
-};
-
-export const metadata: Metadata = {
   metadataBase: new URL("https://through.tech"),
   title: {
     default: "Through.tech",
@@ -30,7 +25,7 @@ export const metadata: Metadata = {
     description: "Lets get through it",
     images: [
       {
-        url: "/preview.png", // resolves to https://through.tech/og-image.jpg because of metadataBase
+        url: "/IMG_6426.jpeg" resolves to https://through.tech/og-image.jpg because of metadataBase
         width: 1200,
         height: 630,
         alt: "Through.tech preview image",
@@ -41,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Through.tech",
     description: "Lets get throigh it",
-    images: ["/preview.png"],
+    images: ["/IMG_6426.jpeg"],
   },
 };
 
